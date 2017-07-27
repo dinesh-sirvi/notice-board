@@ -1,5 +1,7 @@
+require('./configs/config.js');
 const express = require('express');
 const bodyParser = require('body-parser');
+const {mongoose} = require('./mongoose/mongoose');
 const app = express();
 
 
@@ -10,6 +12,6 @@ app.get('/', (req,res)=>{
   res.send('Initial setup');
 });
 
-app.listen(3000, ()=>{
-  console.log("server is up on port 3000");
+app.listen(process.env.PORT, ()=>{
+  console.log(`server is up on port ${process.env.PORT}`);
 });
