@@ -6,6 +6,7 @@ const app = express();
 
 const {Notif} = require('./models/notifs');
 const {Admin} = require('./models/admins');
+const {User} = require('./models/users');
 
 app.use(bodyParser.json());
 
@@ -54,6 +55,20 @@ app.post('/admin', (req,res)=>{
   admin.save().then((doc)=>{
     res.status(200).send(doc);
   }, (error)=>{
+    res.status(400).send();
+  });
+});
+
+app.post('/user', (req, res)=>{
+  var user = new User({
+    name : req.body.name,
+    email : req.body.email,
+    password: req.body.password,
+    department : req.body.department
+  });
+  user.save().then((doc)=>{
+    res.status(200).send(doc);
+  }, (err)=>{
     res.status(400).send();
   });
 });
