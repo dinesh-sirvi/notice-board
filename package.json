@@ -5,14 +5,21 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./server/server.js"
+    "start": "node ./server/server.js",
+    "watch": "nodemon ./server/server.js"
   },
   "author": "Dinesh Choudhary",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^1.0.2",
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
+    "lodash": "^4.17.4",
     "mongodb": "^2.2.30",
-    "mongoose": "^4.11.4"
+    "mongoose": "^4.11.4",
+    "validator": "^8.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
   }
 }
