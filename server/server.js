@@ -2,6 +2,7 @@ require('./configs/config.js');
 const express = require('express');
 const bodyParser = require('body-parser');
 const {mongoose} = require('./mongoose/mongoose');
+const _ = require('lodash');
 const app = express();
 
 const {Notif} = require('./models/notifs');
@@ -72,6 +73,23 @@ app.post('/user', (req, res)=>{
     res.status(400).send();
   });
 });
+
+app.post('/userlogin', (req,res)=>{
+  var body = _.pick(req.body, ['email', 'password']);
+  User.findByCredentials(body.email, body.password).then((user)=>{
+    // console.log(user);
+    user.generateAuthToken().then((token)=>{
+      console.log(token);
+      res.setHeader('x-auth', token);
+      res.status(200).send(user);
+    });
+
+  }, (error)=>{
+    console.log(error);
+    res.status(401).send({msg: error});
+  });
+});
+
 app.listen(process.env.PORT, ()=>{
   console.log(`server is up on port ${process.env.PORT}`);
 });
