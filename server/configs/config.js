@@ -12,5 +12,5 @@ if(env === 'test'){
 
 if(env === 'production'){
   process.env.PORT = 6515;
-  process.env.MONGODB_URI = 'mongodb://<dinesh>:<dc7771>@ds123933.mlab.com:23933/noticeboard';
+  process.env.MONGODB_URI = 'mongodb://dddd:dc7771@ds123933.mlab.com:23933/noticeboard'
 }
