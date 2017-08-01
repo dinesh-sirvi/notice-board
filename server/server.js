@@ -34,6 +34,9 @@ app.post('/notif',  (req,res)=>{
     res.status(400).send(error);
   });
 });
+app.get('/', (req,res)=>{
+  res.send('App is live');
+});
 app.get('/notifs', (req,res)=>{
   Notif.find({department: "Computer"}).then((doc)=>{
     res.status(200).send(doc);
