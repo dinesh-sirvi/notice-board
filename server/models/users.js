@@ -75,7 +75,16 @@ user.statics.findByCredentials = function(email, password){
     });
   });
 };
-
+user.statics.getDepartment = function(id){
+  return new Promise((resolve, reject)=>{
+    this.findOne({_id: id}).then((result)=>{
+      if(!result){
+        reject('Something wrong happened, Contact developers');
+      }
+      resolve(result.department);
+    });
+  });
+};
 user.methods.generateAuthToken = function(){
   var user = this;
   var access = 'auth';

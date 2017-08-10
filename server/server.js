@@ -9,6 +9,8 @@ const {Notif} = require('./models/notifs');
 const {Admin} = require('./models/admins');
 const {User} = require('./models/users');
 
+const{AuthenticateUser} = require('./middleware/authenticateUser');
+
 app.use(bodyParser.json());
 
 // app.get('/notifs', (req,res)=>{
@@ -37,8 +39,9 @@ app.post('/notif',  (req,res)=>{
 app.get('/', (req,res)=>{
   res.send('App is live');
 });
-app.get('/notifs', (req,res)=>{
-  Notif.find({department: "Computer"}).then((doc)=>{
+app.get('/notifs', AuthenticateUser, (req,res)=>{
+  console.log(req.body.department);
+  Notif.find({department: req.body.department}).then((doc)=>{
     res.status(200).send(doc);
   }, (error)=>{
     res.status(400).send();
@@ -82,9 +85,15 @@ app.post('/userlogin', (req,res)=>{
   User.findByCredentials(body.email, body.password).then((user)=>{
     // console.log(user);
     user.generateAuthToken().then((token)=>{
-      console.log(token);
+      //console.log(token);
+      var resObject = {
+        name : user.name,
+        email: user.email,
+        department: user.department,
+        token: token
+      };
       res.setHeader('x-auth', token);
-      res.status(200).send(user);
+      res.status(200).send(resObject);
     });
 
   }, (error)=>{
