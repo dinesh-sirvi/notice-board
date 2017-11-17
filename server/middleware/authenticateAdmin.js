@@ -2,13 +2,16 @@ const jwt = require('jsonwebtoken');
 const {Admin} = require('../models/admins');
 
 module.exports.AuthenticateAdmin = function(req,res,next){
-  var token = req.query.token;
-
+  console.log(req.body.text);
   try{
-    var decoded = jwt.verify(token, 'somesecret');
-    User.getDepartment(decoded._id).then((department)=>{
-      req.body.department = department;
-      console.log(req.body.department);
+    var decoded = jwt.verify(req.body.token, 'somesecret');
+    console.log(decoded);
+    Admin.getDetail(decoded._id).then((result)=>{
+      console.log(result);
+      req.body.department = result.department;
+      req.body.adminName = result.name;
+      req.body.adminPhotoUrl = result.admin_photo;
+      console.log(req.body);
       next();
     });
   } catch(err){

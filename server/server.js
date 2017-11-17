@@ -5,37 +5,41 @@ const {mongoose} = require('./mongoose/mongoose');
 const _ = require('lodash');
 const app = express();
 
+
 const {Notif} = require('./models/notifs');
 const {Admin} = require('./models/admins');
 const {User} = require('./models/users');
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 const{AuthenticateUser} = require('./middleware/authenticateUser');
+const {AuthenticateAdmin} = require('./middleware/authenticateAdmin');
 
-app.use(bodyParser.json());
 
 // app.get('/notifs', (req,res)=>{
 //   res.send('Initial setup');
 // });
 
-app.post('/notif',  (req,res)=>{
+app.post('/notif', AuthenticateAdmin, (req,res)=>{
   var notif = new Notif({
     creatorDetails :{
-      creatorName: "Creator1",
-      creatorPhotoUrl: "creatorUrl"
+      creatorName: req.body.adminName,
+      creatorPhotoUrl: req.body.adminPhotoUrl
     },
     notifDetail:{
-      title: req.body.title,
       text:req.body.text,
       imageUrl: req.body.url
     },
-    department: "Computer"
+    department: req.body.department
   });
+  
   notif.save().then((doc)=>{
     res.status(200).send(doc);
   },(error)=>{
     res.status(400).send(error);
   });
 });
+
 app.get('/', (req,res)=>{
   res.send('App is live');
 });
@@ -106,9 +110,9 @@ app.post('/userlogin', (req,res)=>{
 
 app.post('/adminlogin', (req,res)=>{
   var body = _.pick(req.body, ['email', 'password']);
-  admin.findByCredentials(body.email, body.password).then((user)=>{
+  Admin.findByCredentials(body.email, body.password).then((user)=>{
     // console.log(user);
-    admin.generateAuthToken().then((token)=>{
+    user.generateAuthToken().then((token)=>{
       //console.log(token);
       var resObject = {
         name : user.name,

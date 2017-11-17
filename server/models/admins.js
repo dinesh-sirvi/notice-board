@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
-
+const jwt = require('jsonwebtoken');
 var admin = new mongoose.Schema({
   name :{
     type: String,
@@ -57,16 +57,17 @@ admin.pre('save', function(next){
     });
   });
 });
-admin.statics.getDepartment = function(id){
+admin.statics.getDetail = function(id){
   return new Promise((resolve, reject)=>{
     this.findOne({_id: id}).then((result)=>{
       if(!result){
         reject('Something wrong happened, Contact developers');
       }
-      resolve(result.department);
+      resolve(result);
     });
   });
 };
+
 admin.statics.findByCredentials = function(email, password){
   return new Promise((resolve, reject)=>{
     this.findOne({email}).then((result)=>{
@@ -85,13 +86,13 @@ admin.statics.findByCredentials = function(email, password){
 };
 
 admin.methods.generateAuthToken = function(){
-  var user = this;
+  var admin = this;
   var access = 'auth';
   // var _id = user._id;
   // var email = user.email;
 
   return new Promise((resolve, reject) =>{
-      var token = jwt.sign({_id: user._id, email: user.email}, 'somesecret');
+      var token = jwt.sign({_id: admin._id, email: admin.email}, 'somesecret');
       admin.tokens.push({access,token});
       admin.save().then(()=>{
         resolve(token);
