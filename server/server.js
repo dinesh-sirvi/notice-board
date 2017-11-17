@@ -32,7 +32,7 @@ app.post('/notif', AuthenticateAdmin, (req,res)=>{
     },
     department: req.body.department
   });
-  
+
   notif.save().then((doc)=>{
     res.status(200).send(doc);
   },(error)=>{
@@ -50,7 +50,7 @@ app.get('/notifs', AuthenticateUser, (req,res)=>{
     var response = {};
     var key = "notifs";
     response[key] = doc;
-    res.status(200).send();
+    res.status(200).send(response);
   }, (error)=>{
     res.status(400).send();
   });
