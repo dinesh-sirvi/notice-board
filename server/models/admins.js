@@ -67,6 +67,22 @@ admin.statics.getDepartment = function(id){
     });
   });
 };
+admin.statics.findByCredentials = function(email, password){
+  return new Promise((resolve, reject)=>{
+    this.findOne({email}).then((result)=>{
+      if(!result){
+        reject("Email Doesnot Exist");
+      }
+      bcrypt.compare(password, result.password, (err, res)=>{
+        if(res == true)
+          resolve(result);
+        else {
+          reject("Incorrect password");
+        }
+      });
+    });
+  });
+};
 
 admin.methods.generateAuthToken = function(){
   var user = this;
