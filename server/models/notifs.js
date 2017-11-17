@@ -13,18 +13,13 @@ var notifsSchema = new mongoose.Schema({
     }
   },
   notifDetail :{
-    title :{
-      type: String,
-      minLength: 1,
-      trim: true
-    },
     text :{
       type:String,
       trim: true
     },
     imageUrl :{
       type: String
-    },
+    }
   },
   timeDetails : {
     createdAt : {

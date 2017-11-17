@@ -39,10 +39,14 @@ app.post('/notif',  (req,res)=>{
 app.get('/', (req,res)=>{
   res.send('App is live');
 });
+
 app.get('/notifs', AuthenticateUser, (req,res)=>{
   console.log(req.body.department);
   Notif.find({department: req.body.department}).then((doc)=>{
-    res.status(200).send(doc);
+    var response = {};
+    var key = "notifs";
+    response[key] = doc;
+    res.status(200).send();
   }, (error)=>{
     res.status(400).send();
   });
@@ -53,12 +57,10 @@ app.post('/admin', (req,res)=>{
     name : req.body.name,
     email :req.body.email,
     department: req.body.department,
-    organization: req.body.organization,
-    org_img_url: "ORG_IMG",
-    admin_img_url: "ADMIN_IMG",
-    password: req.body.password,
-    tokens: [{access: "x-auth", token: "adadaidhakbakdahgkd"}]
+    admin_img_url: req.body.admin_photo,
+    password: req.body.password
   });
+  
   admin.save().then((doc)=>{
     res.status(200).send(doc);
   }, (error)=>{

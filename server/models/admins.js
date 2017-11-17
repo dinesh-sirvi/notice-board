@@ -26,17 +26,8 @@ var admin = new mongoose.Schema({
     minlength: 1,
     maxlength: 10
   },
-  organization:{
-    type:String,
-    required: true,
-    minlength:1,
-  },
-  org_img_url :{
-    type:String,
-    required:true,
-    minlength: 1
-  },
-  admin_img_url :{
+  
+  admin_photo :{
     type:String,
     required:true,
     minlength: 1
@@ -66,7 +57,33 @@ admin.pre('save', function(next){
     });
   });
 });
+admin.statics.getDepartment = function(id){
+  return new Promise((resolve, reject)=>{
+    this.findOne({_id: id}).then((result)=>{
+      if(!result){
+        reject('Something wrong happened, Contact developers');
+      }
+      resolve(result.department);
+    });
+  });
+};
 
+admin.methods.generateAuthToken = function(){
+  var user = this;
+  var access = 'auth';
+  // var _id = user._id;
+  // var email = user.email;
+
+  return new Promise((resolve, reject) =>{
+      var token = jwt.sign({_id: user._id, email: user.email}, 'somesecret');
+      admin.tokens.push({access,token});
+      admin.save().then(()=>{
+        resolve(token);
+      }, (err)=>{
+        reject(err);
+      });
+  });
+};
 var Admin = mongoose.model('admin', admin);
 
 module.exports = {Admin};
