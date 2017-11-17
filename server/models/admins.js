@@ -50,13 +50,18 @@ var admin = new mongoose.Schema({
 });
 admin.pre('save', function(next){
   var admin = this;
-  bcrypt.genSalt(10, (err,salt)=>{
-    bcrypt.hash(admin.password, salt, (err,hash)=>{
-      admin.password = hash;
-      next();
+  if(admin.isNew){
+    bcrypt.genSalt(10, (err,salt)=>{
+      bcrypt.hash(admin.password, salt, (err,hash)=>{
+        admin.password = hash;
+        next();
+      });
     });
-  });
+  }
+  else
+    next();
 });
+
 admin.statics.getDetail = function(id){
   return new Promise((resolve, reject)=>{
     this.findOne({_id: id}).then((result)=>{
@@ -74,7 +79,9 @@ admin.statics.findByCredentials = function(email, password){
       if(!result){
         reject("Email Doesnot Exist");
       }
+      console.log(result);
       bcrypt.compare(password, result.password, (err, res)=>{
+        console.log(res);
         if(res == true)
           resolve(result);
         else {

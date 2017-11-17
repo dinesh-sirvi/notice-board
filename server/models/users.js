@@ -66,6 +66,7 @@ user.statics.findByCredentials = function(email, password){
         reject("Email Doesnot Exist");
       }
       bcrypt.compare(password, result.password, (err, res)=>{
+        console.log(result);
         if(res == true)
           resolve(result);
         else {
