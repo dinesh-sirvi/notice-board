@@ -104,6 +104,29 @@ app.post('/userlogin', (req,res)=>{
   });
 });
 
+app.post('/adminlogin', (req,res)=>{
+  var body = _.pick(req.body, ['email', 'password']);
+  admin.findByCredentials(body.email, body.password).then((user)=>{
+    // console.log(user);
+    admin.generateAuthToken().then((token)=>{
+      //console.log(token);
+      var resObject = {
+        name : user.name,
+        email: user.email,
+        department: user.department,
+        token: token
+      };
+      res.setHeader('x-auth', token);
+      res.status(200).send(resObject);
+    });
+
+  }, (error)=>{
+    console.log(error);
+    res.status(401).send({msg: error});
+  });
+});
+
+
 app.listen(process.env.PORT, ()=>{
   console.log(`server is up on port ${process.env.PORT}`);
 });
