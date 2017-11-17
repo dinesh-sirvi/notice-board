@@ -57,10 +57,10 @@ app.post('/admin', (req,res)=>{
     name : req.body.name,
     email :req.body.email,
     department: req.body.department,
-    admin_img_url: req.body.admin_photo,
+    admin_photo: req.body.admin_photo_url,
     password: req.body.password
   });
-  
+
   admin.save().then((doc)=>{
     res.status(200).send(doc);
   }, (error)=>{
