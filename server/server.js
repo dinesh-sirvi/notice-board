@@ -118,7 +118,8 @@ app.post('/adminlogin', (req,res)=>{
         name : user.name,
         email: user.email,
         department: user.department,
-        token: token
+        token: token,
+        photoUrl : user.admin_photo
       };
       res.setHeader('x-auth', token);
       res.status(200).send(resObject);
