@@ -21,11 +21,8 @@ var notifsSchema = new mongoose.Schema({
       type: String
     }
   },
-  timeDetails : {
-    createdAt : {
-      type: Date,
-      default: Date.now
-    }
+  timeStamp: {
+    type: String
   },
   department : {
     type: String,
