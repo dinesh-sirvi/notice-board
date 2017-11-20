@@ -22,7 +22,8 @@ var notifsSchema = new mongoose.Schema({
     }
   },
   timeStamp: {
-    type: String
+    type: String,
+    Required:true
   },
   department : {
     type: String,

@@ -30,7 +30,8 @@ app.post('/notif', AuthenticateAdmin, (req,res)=>{
       text:req.body.text,
       imageUrl: req.body.url
     },
-    department: req.body.department
+    department: req.body.department,
+    timeStamp : req.body.time
   });
 
   notif.save().then((doc)=>{
