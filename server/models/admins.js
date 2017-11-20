@@ -24,7 +24,7 @@ var admin = new mongoose.Schema({
     type:String,
     required:true,
     minlength: 1,
-    maxlength: 10
+    maxlength: 15
   },
   
   admin_photo :{
@@ -79,7 +79,6 @@ admin.statics.findByCredentials = function(email, password){
       if(!result){
         reject("Email Doesnot Exist");
       }
-      console.log(result);
       bcrypt.compare(password, result.password, (err, res)=>{
         console.log(res);
         if(res == true)
